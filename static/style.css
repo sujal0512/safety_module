@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BCCL Safety Compliance Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Base styles */
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --warning-color: #f59e0b;
+            --danger-color: #dc2626;
+            --success-color: #16a34a;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #334155;
+            background-color: #f8fafc;
+            overflow-x: hidden;
+        }
+        
+        /* Navigation animations */
+        @keyframes slideInDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .nav-animate {
+            animation: slideInDown 0.5s ease-out forwards;
+        }
+        
+        /* Hero section animations */
+        @keyframes fadeInScale {
+            0% {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .hero-content {
+            animation: fadeInScale 0.8s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+        
+        /* Card hover animations */
+        .card {
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Safety alert animation */
+        @keyframes pulseWarning {
+            0% {
+                box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(245, 158, 11, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
+            }
+        }
+        
+        .alert-pulse {
+            animation: pulseWarning 2s infinite;
+        }
+        
+        /* Checklist animation */
+        @keyframes checkIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .checklist-item {
+            opacity: 0;
+            animation: checkIn 0.5s ease-out forwards;
+        }
+        
+        .checklist-item:nth-child(1) { animation-delay: 0.1s; }
+        .checklist-item:nth-child(2) { animation-delay: 0.2s; }
+        .checklist-item:nth-child(3) { animation-delay: 0.3s; }
+        .checklist-item:nth-child(4) { animation-delay: 0.4s; }
+        .checklist-item:nth-child(5) { animation-delay: 0.5s; }
+        
+        /* Scroll animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in-up {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        /* Safety form animation */
+        @keyframes formAppear {
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .form-animate {
+            animation: formAppear 0.6s ease-out forwards;
+        }
+        
+        /* Progress bar animation */
+        @keyframes progressFill {
+            from {
+                width: 0%;
+            }
+            to {
+                width: 100%;
+            }
+        }
+        
+        .progress-animate {
+            animation: progressFill 2s ease-out forwards;
+        }
+        
+        /* Tab animation */
+        @keyframes tabSlide {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .tab-content.active {
+            animation: tabSlide 0.4s ease-out forwards;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Navigation -->
+    <header class="bg-white shadow-md nav-animate fixed w-full z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <img src="https://placehold.co/50x50" alt="BCCL company logo with blue and white color scheme" class="h-12 mr-2">
+                    <span class="text-xl font-bold text-blue-800">BCCL Safety</span>
+                </div>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#home" class="text-blue-800 hover:text-blue-600 transition-colors">Home</a>
+                    <a href="#compliance" class="text-slate-600 hover:text-blue-600 transition-colors">Compliance</a>
+                    <a href="#training" class="text-slate-600 hover:text-blue-600 transition-colors">Training</a>
+                    <a href="#resources" class="text-slate-600 hover:text-blue-600 transition-colors">Resources</a>
+                    <a href="#contact" class="text-slate-600 hover:text-blue-600 transition-colors">Contact</a>
+                </nav>
+                <button class="md:hidden text-blue-800">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="bg-gradient-to-r from-blue-700 to-blue-900 text-white pt-32 pb-20">
+        <div class="container mx-auto px-4">
+            <div class="grid hero-grid md:grid-cols-2 gap-8 items-center">
+                <div class="hero-content">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4">Safety Compliance Made Simple</h1>
+                    <p class="text-xl mb-8 opacity-90">Ensuring workplace safety through comprehensive compliance solutions tailored for BCCL operations.</p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#compliance" class="bg-white text-blue-800 px-6 py-3 rounded-lg font-medium hover:bg-blue-50 transition-all shadow-lg hover:shadow-xl">Get Started</a>
+                        <a href="#contact" class="border-2 border-white px-6 py-3 rounded-lg font-medium hover:bg-white hover:text-blue-800 transition-all">Contact Us</a>
+                    </div>
+                </div>
+                <div class="hero-content">
+                    <div class="bg-white/20 p-6 rounded-xl backdrop-blur-sm">
+                        <img src="https://placehold.co/600x400" alt="Safety officers inspecting workplace with hard hats and clipboards at an industrial site" class="rounded-lg shadow-2xl">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Compliance Status -->
+    <section id="compliance" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12 fade-in-up">
+                <h2 class="text-3xl font-bold text-blue-800 mb-4">Your Compliance Status</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto">Monitor and manage all your safety compliance requirements in one place.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 mb-12">
+                <div class="card bg-white p-6 rounded-xl shadow-lg border-t-4 border-blue-500 fade-in-up" style="animation-delay: 0.1s;">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-100 p-3 rounded-full mr-4">
+                            <i class="fas fa-clipboard-check text-blue-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">Current Compliance</h3>
+                    </div>
+                    <div class="mb-4">
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm font-medium">85% Complete</span>
+                            <span class="text-sm">12/14 tasks</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-blue-600 h-2.5 rounded-full progress-animate" style="width: 85%"></div>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 mb-4">You're almost there! Just 2 more items to complete your compliance requirements.</p>
+                    <a href="#" class="text-blue-600 font-medium hover:text-blue-800 inline-flex items-center">View Details <i class="fas fa-chevron-right ml-1 text-sm"></i></a>
+                </div>
+                
+                <div class="card bg-white p-6 rounded-xl shadow-lg border-t-4 border-yellow-500 fade-in-up" style="animation-delay: 0.2s;">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-yellow-100 p-3 rounded-full mr-4">
+                            <i class="fas fa-exclamation-triangle text-yellow-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">Pending Actions</h3>
+                    </div>
+                    <div class="space-y-3 mb-4">
+                        <div class="flex items-center">
+                            <div class="w-2 h-2 bg-yellow-500 rounded-full mr-2"></div>
+                            <span class="text-sm">Safety audit overdue</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
+                            <span class="text-sm">2 expired certifications</span>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 mb-4">Address these items promptly to maintain full compliance.</p>
+                    <a href="#" class="text-blue-600 font-medium hover:text-blue-800 inline-flex items-center">Resolve Now <i class="fas fa-chevron-right ml-1 text-sm"></i></a>
+                </div>
+                
+                <div class="card bg-white p-6 rounded-xl shadow-lg border-t-4 border-green-500 fade-in-up" style="animation-delay: 0.3s;">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-green-100 p-3 rounded-full mr-4">
+                            <i class="fas fa-calendar-check text-green-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">Upcoming Deadlines</h3>
+                    </div>
+                    <div class="space-y-3 mb-4">
+                        <div class="flex justify-between">
+                            <span class="text-sm">Quarterly Report</span>
+                            <span class="text-sm font-medium">May 15</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm">Safety Training</span>
+                            <span class="text-sm font-medium">June 1</span>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 mb-4">Stay ahead by completing these before the due dates.</p>
+                    <a href="#" class="text-blue-600 font-medium hover:text-blue-800 inline-flex items-center">See All <i class="fas fa-chevron-right ml-1 text-sm"></i></a>
+                </div>
+            </div>
+            
+            <!-- Alert Banner -->
+            <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-r-lg alert-pulse fade-in-up" style="animation-delay: 0.4s;">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-exclamation-circle text-yellow-500 text-xl mr-3 mt-1"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-yellow-700 font-medium">Action Required: Annual safety certification renewal begins next week. <a href="#" class="underline hover:text-yellow-800">Start the process now</a> to avoid disruptions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Safety Checklist -->
+    <section class="py-16 bg-slate-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12 fade-in-up">
+                <h2 class="text-3xl font-bold text-blue-800 mb-4">Essential Safety Checklist</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto">Daily safety protocols to ensure compliance and protect your team.</p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden fade-in-up">
+                <div class="p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="bg-blue-100 p-2 rounded-lg mr-4">
+                            <i class="fas fa-clipboard-list text-blue-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">Daily Inspection Requirements</h3>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="checklist-item flex items-start">
+                            <div class="flex-shrink-0 h-5 w-5 text-green-500 mr-3 mt-1">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">Personal Protective Equipment</h4>
+                                <p class="text-sm text-slate-500">Verify all employees have appropriate PPE for their assigned tasks.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="checklist-item flex items-start">
+                            <div class="flex-shrink-0 h-5 w-5 text-blue-500 mr-3 mt-1">
+                                <i class="far fa-circle"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">Emergency Equipment</h4>
+                                <p class="text-sm text-slate-500">Inspect fire extinguishers, eyewash stations, and first aid kits.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="checklist-item flex items-start">
+                            <div class="flex-shrink-0 h-5 w-5 text-blue-500 mr-3 mt-1">
+                                <i class="far fa-circle"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">Hazard Identification</h4>
+                                <p class="text-sm text-slate-500">Walk the facility to identify and mitigate potential hazards.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="checklist-item flex items-start">
+                            <div class="flex-shrink-0 h-5 w-5 text-blue-500 mr-3 mt-1">
+                                <i class="far fa-circle"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">Training Verification</h4>
+                                <p class="text-sm text-slate-500">Ensure all personnel have completed required safety training.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="checklist-item flex items-start">
+                            <div class="flex-shrink-0 h-5 w-5 text-blue-500 mr-3 mt-1">
+                                <i class="far fa-circle"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">Incident Reporting</h4>
+                                <p class="text-sm text-slate-500">Review and document any safety incidents from previous shift.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 pt-6 border-t border-slate-200 flex justify-between items-center">
+                        <div class="text-sm text-slate-600">1 of 5 items completed</div>
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">Save Progress</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Training Section -->
+    <section id="training" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12 fade-in-up">
+                <h2 class="text-3xl font-bold text-blue-800 mb-4">Safety Training Programs</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto">Comprehensive training solutions to build a culture of safety.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 mb-12">
+                <div class="card bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow fade-in-up" style="animation-delay: 0.1s;">
+                    <div class="bg-blue-100 p-4 rounded-lg mb-4 flex justify-center">
+                        <img src="https://placehold.co/300x200" alt="Instructor leading a safety training session with workers in a classroom setting" class="rounded-lg">
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Mandatory Compliance Training</h3>
+                    <p class="text-slate-600 mb-4">Essential training covering OSHA and industry-specific safety regulations.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-slate-500">Next Session: May 25</span>
+                        <a href="#" class="text-blue-600 font-medium text-sm hover:text-blue-800">Enroll Now</a>
+                    </div>
+                </div>
+                
+                <div class="card bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow fade-in-up" style="animation-delay: 0.2s;">
+                    <div class="bg-blue-100 p-4 rounded-lg mb-4 flex justify-center">
+                        <img src="https://placehold.co/300x200" alt="Hands-on fire safety demonstration with emergency response team" class="rounded-lg">
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Emergency Response</h3>
+                    <p class="text-slate-600 mb-4">Prepare your team with practical emergency readiness skills.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-slate-500">Next Session: June 5</span>
+                        <a href="#" class="text-blue-600 font-medium text-sm hover:text-blue-800">Enroll Now</a>
+                    </div>
+                </div>
+                
+                <div class="card bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow fade-in-up" style="animation-delay: 0.3s;">
+                    <div class="bg-blue-100 p-4 rounded-lg mb-4 flex justify-center">
+                        <img src="https://placehold.co/300x200" alt="Workers learning proper equipment handling in a warehouse environment" class="rounded-lg">
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Equipment Safety</h3>
+                    <p class="text-slate-600 mb-4">Proper use and maintenance of workplace machinery and tools.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-slate-500">Next Session: June 12</span>
+                        <a href="#" class="text-blue-600 font-medium text-sm hover:text-blue-800">Enroll Now</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center fade-in-up" style="animation-delay: 0.4s;">
+                <a href="#" class="inline-flex items-center px-6 py-3 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors font-medium">
+                    View All Training Programs <i class="fas fa-chevron-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section id="resources" class="py-16 bg-slate-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12 fade-in-up">
+                <h2 class="text-3xl font-bold text-blue-800 mb-4">Compliance Resources</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto">Download safety manuals, policies, and reporting forms.</p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden fade-in-up">
+                    <div class="p-8">
+                        <div class="tabs flex border-b border-slate-200 mb-6">
+                            <button class="tab-btn active px-4 py-2 font-medium text-blue-600 border-b-2 border-blue-600">Policies</button>
+                            <button class="tab-btn px-4 py-2 font-medium text-slate-600 hover:text-blue-600">Forms</button>
+                            <button class="tab-btn px-4 py-2 font-medium text-slate-600 hover:text-blue-600">Regulations</button>
+                            <button class="tab-btn px-4 py-2 font-medium text-slate-600 hover:text-blue-600">Guides</button>
+                        </div>
+                        
+                        <div class="tab-content active">
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center p-3 hover:bg-slate-50 rounded-lg transition-colors">
+                                    <div class="flex items-center">
+                                        <div class="bg-blue-100 p-2 rounded-lg mr-4">
+                                            <i class="fas fa-book text-blue-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium">BCCL Workplace Safety Policy</h4>
+                                            <p class="text-sm text-slate-500">Updated: May 2023 | PDF 1.2MB</p>
+                                        </div>
+                                    </div>
+                                    <a href="#" class="text-blue-600 hover:text-blue-800 px-3 py-1 rounded hover:bg-blue-50 transition-colors">Download</a>
+                                </div>
+                                
+                                <div class="flex justify-between items-center p-3 hover:bg-slate-50 rounded-lg transition-colors">
+                                    <div class="flex items-center">
+                                        <div class="bg-blue-100 p-2 rounded-lg mr-4">
+                                            <i class="fas fa-file-alt text-blue-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium">Hazard Communication Program</h4>
+                                            <p class="text-sm text-slate-500">Updated: March 2023 | PDF 850KB</p>
+                                        </div>
+                                    </div>
+                                    <a href="#" class="text-blue-600 hover:text-blue-800 px-3 py-1 rounded hover:bg-blue-50 transition-colors">Download</a>
+                                </div>
+                                
+                                <div class="flex justify-between items-center p-3 hover:bg-slate-50 rounded-lg transition-colors">
+                                    <div class="flex items-center">
+                                        <div class="bg-blue-100 p-2 rounded-lg mr-4">
+                                            <i class="fas fa-file-contract text-blue-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium">Emergency Action Plan</h4>
+                                            <p class="text-sm text-slate-500">Updated: January 2023 | PDF 1.5MB</p>
+                                        </div>
+                                    </div>
+                                    <a href="#" class="text-blue-600 hover:text-blue-800 px-3 py-1 rounded hover:bg-blue-50 transition-colors">Download</a>
+                                </div>
+                                
+                                <div class="flex justify-between items-center p-3 hover:bg-slate-50 rounded-lg transition-colors">
+                                    <div class="flex items-center">
+                                        <div class="bg-blue-100 p-2 rounded-lg mr-4">
+                                            <i class="fas fa-file-signature text-blue-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium">Personal Protective Equipment Policy</h4>
+                                            <p class="text-sm text-slate-500">Updated: April 2023 | PDF 720KB</p>
+                                        </div>
+                                    </div>
+                                    <a href="#" class="text-blue-600 hover:text-blue-800 px-3 py-1 rounded hover:bg-blue-50 transition-colors">Download</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Incident Reporting Form -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden form-animate">
+                <div class="bg-blue-700 text-white p-6">
+                    <h2 class="text-2xl font-bold">Safety Incident Report</h2>
+                    <p class="opacity-90">Report workplace accidents, near misses, or safety concerns.</p>
+                </div>
+                <div class="p-8">
+                    <form>
+                        <div class="grid md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label for="date" class="block text-sm font-medium text-slate-700 mb-1">Date of Incident</label>
+                                <input type="date" id="date" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label for="time" class="block text-sm font-medium text-slate-700 mb-1">Time of Incident</label>
+                                <input type="time" id="time" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="location" class="block text-sm font-medium text-slate-700 mb-1">Location</label>
+                            <input type="text" id="location" placeholder="Building, floor, or specific area" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="description" class="block text-sm font-medium text-slate-700 mb-1">Incident Description</label>
+                            <textarea id="description" rows="4" placeholder="Provide detailed description of what happened" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Incident Type</label>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                <label class="flex items-center">
+                                    <input type="radio" name="type" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-300"> <span class="ml-2 text-sm text-slate-700">Injury</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="type" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-300"> <span class="ml-2 text-sm text-slate-700">Near Miss</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="type" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-300"> <span class="ml-2 text-sm text-slate-700">Property Damage</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="type" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-300"> <span class="ml-2 text-sm text-slate-700">Hazard</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="type" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-300"> <span class="ml-2 text-sm text-slate-700">Equipment Failure</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="type" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-300"> <span class="ml-2 text-sm text-slate-700">Other</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="actions" class="block text-sm font-medium text-slate-700 mb-1">Immediate Actions Taken</label>
+                            <textarea id="actions" rows="3" placeholder="First aid, evacuation, equipment shutdown, etc." class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-4">
+                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">Submit Report</button>
+                            <button type="button" class="border border-slate-300 text-slate-700 px-6 py-3 rounded-lg font-medium hover:bg-slate-50 transition-colors">Save Draft</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 bg-blue-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12 fade-in-up">
+                <h2 class="text-3xl font-bold text-blue-800 mb-4">Contact Our Safety Team</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto">Have questions about compliance or need assistance? Reach out to our experts.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+                <div class="fade-in-up" style="animation-delay: 0.2s;">
+                    <div class="bg-white p-8 rounded-xl shadow-lg">
+                        <h3 class="text-xl font-semibold mb-6 text-blue-800">Get In Touch</h3>
+                        <form>
+                            <div class="mb-4">
+                                <label for="name" class="block text-sm font-medium text-slate-700 mb-1">Name</label>
+                                <input type="text" id="name" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div class="mb-4">
+                                <label for="email" class="block text-sm font-medium text-slate-700 mb-1">Email</label>
+                                <input type="email" id="email" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div class="mb-4">
+                                <label for="subject" class="block text-sm font-medium text-slate-700 mb-1">Subject</label>
+                                <select id="subject" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option>Select a topic</option>
+                                    <option>Compliance Questions</option>
+                                    <option>Training Inquiries</option>
+                                    <option>Site Safety Assessment</option>
+                                    <option>Incident Follow-up</option>
+                                    <option>General Inquiry</option>
+                                </select>
+                            </div>
+                            <div class="mb-6">
+                                <label for="message" class="block text-sm font-medium text-slate-700 mb-1">Message</label>
+                                <textarea id="message" rows="4" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="fade-in-up" style="animation-delay: 0.4s;">
+                    <div class="bg-white p-8 rounded-xl shadow-lg h-full">
+                        <h3 class="text-xl font-semibold mb-6 text-blue-800">Safety Department</h3>
+                        <div class="space-y-6">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 bg-blue-100 p-3 rounded-lg mr-4">
+                                    <i class="fas fa-phone-alt text-blue-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-slate-800 mb-1">Emergency Hotline</h4>
+                                    <p class="text-slate-600">+1 (888) 555-SAFE (7233)</p>
+                                    <p class="text-sm text-slate-500">Available 24/7 for urgent safety concerns</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 bg-blue-100 p-3 rounded-lg mr-4">
+                                    <i class="fas fa-envelope text-blue-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-slate-800 mb-1">Email</h4>
+                                    <p class="text-slate-600">safety@bccl.com</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 bg-blue-100 p-3 rounded-lg mr-4">
+                                    <i class="fas fa-map-marker-alt text-blue-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-slate-800 mb-1">Office Location</h4>
+                                    <p class="text-slate-600">123 Safety Way, Suite 400<br>Detroit, MI 48226</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 bg-blue-100 p-3 rounded-lg mr-4">
+                                    <i class="fas fa-clock text-blue-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-slate-800 mb-1">Office Hours</h4>
+                                    <p class="text-slate-600">Monday - Friday: 8:00 AM - 5:00 PM</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 pt-6 border-t border-slate-200">
+                            <h4 class="font-medium text-slate-800 mb-3">Connect With Us</h4>
+                            <div class="flex space-x-4">
+                                <a href="#" class="bg-blue-100 text-blue-600 p-3 rounded-full hover:bg-blue-200 transition-colors">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                                <a href="#" class="bg-blue-100 text-blue-600 p-3 rounded-full hover:bg-blue-200 transition-colors">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="#" class="bg-blue-100 text-blue-600 p-3 rounded-full hover:bg-blue-200 transition-colors">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="#" class="bg-blue-100 text-blue-600 p-3 rounded-full hover:bg-blue-200 transition-colors">
+                                    <i class="fab fa-youtube"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-blue-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">BCCL Safety</h3>
+                    <p class="text-blue-200 text-sm">Committed to building a culture of safety through compliance, education, and continuous improvement.</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-blue-200 hover:text-white text-sm transition-colors">Safety Compliance</a></li>
+                        <li><a href="#" class="text-blue-200 hover:text-white text-sm transition-colors">Training Calendar</a></li>
+                        <li><a href="#" class="text-blue-200 hover:text-white text-sm transition-colors">Resources</a></li>
+                        <li><a href="#" class="text-blue-200 hover:text-white text-sm transition-colors">Reporting</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Resources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-blue-200 hover:text-white text-sm transition-colors">Safety Manuals</a></li>
+                        <li><a href="#" class="text-blue-200 hover:text-white text-sm transition-colors">Regulatory Updates</a></li>
+                        <li><a href="#" class="text-blue-200 hover:text-white text-sm transition-colors">Toolbox Talks</a></li>
+                        <li><a href="#" class="text-blue-200 hover:text-white text-sm transition-colors">MSDS Database</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Subscribe</h3>
+                    <p class="text-blue-200 text-sm mb-2">Get the latest safety updates and training announcements.</p>
+                    <div class="flex">
+                        <input type="email" placeholder="Your email" class="px-3 py-2 text-slate-900 rounded-l-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <button class="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-r-lg transition-colors">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-blue-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-blue-300 text-sm mb-4 md:mb-0">© 2023 BCCL Safety Compliance. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-blue-300 hover:text-white text-sm transition-colors">Privacy Policy</a>
+                    <a href="#" class="text-blue-300 hover:text-white text-sm transition-colors">Terms of Service</a>
+                    <a href="#" class="text-blue-300 hover:text-white text-sm transition-colors">Accessibility</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Tab functionality
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons and contents
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked button
+                btn.classList.add('active');
+                
+                // Find corresponding content and activate it (this is a simplified version)
+                // In a real implementation, you'd want to properly link buttons to their contents
+            });
+        });
+        
+        // Scroll animation trigger
+        const fadeElements = document.querySelectorAll('.fade-in-up');
+        
+        function checkScroll() {
+            fadeElements.forEach(el => {
+                const elTop = el.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if(elTop < windowHeight - 100) {
+                    el.style.opacity = '1';
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', checkScroll);
+        window.addEventListener('load', checkScroll);
+        
+        // Mobile menu toggle would be implemented here
+    </script>
+</body>
+</html>
