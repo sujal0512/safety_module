@@ -2,180 +2,798 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Safety Dashboard</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bharat Coking Coal Limited - Safety Dashboard</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Bootstrap CSS & Animate.css -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        .delete-btn {
-            transition: transform 0.1s;
+        :root {
+            --primary: #2c3e50;
+            --secondary: #e74c3c;
+            --accent: #f39c12;
+            --dark: #1a252f;
+            --light: #ecf0f1;
         }
-        .delete-btn:hover {
-            transform: scale(1.1) rotate(-10deg);
+        html { scroll-behavior: smooth; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: #f9f9f9; color: #333; overflow-x: hidden; }
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            color: white; padding: 1rem 0; position: fixed; width: 100%; top: 0; z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;
         }
-        .dashboard-img {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
-            margin-right: 15px;
+        header.scrolled {
+            padding: 0.5rem 0;
+            background: rgba(44, 62, 80, 0.95);
+            backdrop-filter: blur(10px);
         }
-        .contact-section {
-            margin-top: 60px;
-            padding: 40px 0;
-            background: #f8f9fa;
-            border-radius: 12px;
+        .logo-container { display: flex; align-items: center; gap: 15px; }
+        .logo { width: 60px; height: 60px; object-fit: contain; }
+        nav ul { display: flex; gap: 25px; }
+        nav ul li { list-style: none; position: relative; }
+        nav ul li a {
+            color: white; text-decoration: none; font-weight: 500; font-size: 1rem;
+            transition: all 0.3s ease; padding: 5px 0; position: relative;
         }
+        nav ul li a:hover { color: var(--accent); }
+        nav ul li a::after {
+            content: ''; position: absolute; width: 0; height: 2px; background: var(--accent);
+            bottom: 0; left: 0; transition: width 0.3s ease;
+        }
+        nav ul li a:hover::after { width: 100%; }
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/5217a8ff-de6d-4ac7-8fad-7e8906b2bed7.png') no-repeat center center/cover;
+            display: flex; align-items: center; color: white; text-align: center; margin-top: 80px; position: relative; overflow: hidden;
+        }
+        .hero-content { max-width: 800px; margin: 0 auto; padding: 2rem; animation: fadeIn 1.5s ease; z-index: 1; }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 2px; }
+        .hero p { font-size: 1.2rem; margin-bottom: 2rem; line-height: 1.6; }
+        .btn {
+            display: inline-block; background: var(--accent); color: white; padding: 12px 30px;
+            border-radius: 30px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;
+            border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(243,156,18,0.3);
+        }
+        .btn:hover { transform: translateY(-5px); box-shadow: 0 6px 20px rgba(243,156,18,0.4); }
+        .about { padding: 5rem 0; background: white; }
+        .section-header { text-align: center; margin-bottom: 3rem; }
+        .section-header h2 {
+            font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; position: relative; display: inline-block;
+        }
+        .section-header h2::after {
+            content: ''; position: absolute; width: 60%; height: 3px; background: var(--accent); bottom: -10px; left: 20%;
+        }
+        .section-header p { color: #666; max-width: 700px; margin: 0 auto; font-size: 1.1rem; line-height: 1.6; }
+        .about-content {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;
+        }
+        .about-text { padding: 1rem; }
+        .about-text h3 { font-size: 2rem; color: var(--dark); margin-bottom: 1rem; }
+        .about-text p { color: #666; margin-bottom: 1.5rem; line-height: 1.8; }
+        .stats {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 2rem;
+        }
+        .stat-item {
+            text-align: center; padding: 1.5rem; border-radius: 8px; background: #f5f5f5; transition: all 0.3s ease;
+        }
+        .stat-item:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .stat-item h4 { font-size: 2.5rem; color: var(--accent); margin-bottom: 0.5rem; }
+        .stat-item p { color: var(--primary); font-weight: 500; }
+        .delete-btn { transition: transform 0.1s; }
+        .delete-btn:hover { transform: scale(1.1) rotate(-10deg); }
+        .dashboard-img { width: 80px; height: 80px; object-fit: contain; margin-right: 15px; }
+        .contact-section { margin-top: 60px; padding: 40px 0; background: #f8f9fa; border-radius: 12px; }
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1rem; }
+        }
+        @media (max-width: 768px) {
+            nav ul { gap: 15px; }
+            .section-header h2 { font-size: 2rem; }
+            .hero h1 { font-size: 2rem; }
+        }
+        @media (max-width: 576px) {
+            .logo-container { flex-direction: column; gap: 10px; }
+            nav ul { flex-direction: column; gap: 10px; }
+            .hero-content { padding: 1rem; }
+            .hero h1 { font-size: 1.8rem; }
+            .btn { padding: 10px 20px; }
+            .footer-container { grid-template-columns: 1fr; }
+        }
+        /* Utility Classes */
+        .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+        .flex { display: flex; }
+        .justify-between { justify-content: space-between; }
+        .items-center { align-items: center; }
+        .text-center { text-align: center; }
+        .mt-1 { margin-top: 0.5rem; }
+        .mt-2 { margin-top: 1rem; }
+        .mt-3 { margin-top: 1.5rem; }
+        .mt-4 { margin-top: 2rem; }
+        .mt-5 { margin-top: 3rem; }
+        .mb-1 { margin-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mb-3 { margin-bottom: 1.5rem; }
+        .mb-4 { margin-bottom: 2rem; }
+        .mb-5 { margin-bottom: 3rem; }
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .animate-pulse { animation: pulse 2s infinite; }
+        /* Loader */
+        .loader-wrapper {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--primary); display: flex; align-items: center; justify-content: center;
+            z-index: 9999; transition: opacity 0.5s ease;
+        }
+        .loader {
+            width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.2);
+            border-radius: 50%; border-top-color: var(--accent); animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        /* Floating shapes */
+        .floating-shape {
+            position: absolute; width: 100px; height: 100px;
+            background: rgba(243,156,18,0.1);
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            animation: floating 8s ease-in-out infinite; z-index: 0;
+        }
+        @keyframes floating {
+            0% { transform: translate(0, 0) rotate(0deg);}
+            50% { transform: translate(50px, 50px) rotate(180deg);}
+            100% { transform: translate(0, 0) rotate(360deg);}
+        }
+        .floating-shape:nth-child(2) {
+            width: 150px; height: 150px; background: rgba(44,62,80,0.05); animation-delay: 0.5s;
+        }
+        .floating-shape:nth-child(3) {
+            width: 200px; height: 200px; background: rgba(231,76,60,0.05); animation-delay: 1s;
+        }
+        /* Footer */
+        footer { background: var(--dark); color: white; padding: 3rem 0 1rem; }
+        .footer-container {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;
+        }
+        .footer-col h3 { font-size: 1.5rem; margin-bottom: 1.5rem; position: relative; padding-bottom: 10px; }
+        .footer-col h3::after {
+            content: ''; position: absolute; left: 0; bottom: 0; width: 50px; height: 2px; background: var(--accent);
+        }
+        .footer-col p { color: #bbb; line-height: 1.6; margin-bottom: 1.5rem; }
+        .social-links { display: flex; gap: 1rem; }
+        .social-links a {
+            display: flex; align-items: center; justify-content: center; width: 40px; height: 40px;
+            background: rgba(255,255,255,0.1); border-radius: 50%; color: white; text-decoration: none; transition: all 0.3s ease;
+        }
+        .social-links a:hover { background: var(--accent); transform: translateY(-3px); }
+        .footer-links { list-style: none; }
+        .footer-links li { margin-bottom: 1rem; }
+        .footer-links a { color: #bbb; text-decoration: none; transition: all 0.3s ease; display: block; }
+        .footer-links a:hover { color: var(--accent); padding-left: 5px; }
+        .copyright {
+            text-align: center; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); color: #bbb; font-size: 0.9rem;
+        }
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: var(--accent);
+            color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            text-decoration: none; box-shadow: 0 2px 10px rgba(0,0,0,0.1); opacity: 0; visibility: hidden;
+            transition: all 0.3s ease; z-index: 99;
+        }
+        .back-to-top.active { opacity: 1; visibility: visible; }
+        .back-to-top:hover { background: var(--primary); transform: translateY(-3px); }
+        /* Service Cards */
+        .service-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .service-card {
+            background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(44,62,80,0.07);
+            overflow: hidden; transition: box-shadow 0.3s, transform 0.3s;
+            display: flex; flex-direction: column; align-items: center; text-align: center; padding: 2rem 1rem;
+        }
+        .service-card:hover { box-shadow: 0 6px 24px rgba(44,62,80,0.15); transform: translateY(-5px) scale(1.02); }
+        .service-img img { width: 80px; height: 80px; object-fit: contain; margin-bottom: 1rem; }
+        .service-content h3 { font-size: 1.3rem; color: var(--primary); margin-bottom: 0.5rem; }
+        .service-content p { color: #666; }
+        /* Testimonials */
+        .testimonial-container { display: flex; justify-content: center; align-items: center; min-height: 320px; }
+        .testimonial-slide {
+            background: #fff; border-radius: 16px; box-shadow: 0 2px 12px rgba(44,62,80,0.08);
+            padding: 2rem 2.5rem; max-width: 500px; margin: 0 auto; text-align: center; position: relative;
+            min-height: 260px;
+        }
+        .testimonial-img img {
+            width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 1rem; border: 3px solid var(--accent);
+        }
+        .testimonial-quote { font-size: 1.1rem; color: #444; font-style: italic; margin-bottom: 1.2rem; }
+        .testimonial-author { font-weight: 600; color: var(--primary); margin-bottom: 0.2rem; }
+        .testimonial-role { color: #888; font-size: 0.95rem; }
+        /* Timeline */
+        .timeline-section { background: #f7f7f7; padding: 5rem 0; }
+        .timeline { display: flex; flex-direction: column; gap: 2rem; margin-top: 2rem; }
+        .timeline-item { display: flex; }
+        .timeline-content {
+            background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(44,62,80,0.07);
+            padding: 1.5rem 2rem; flex: 1;
+        }
+        .timeline-date {
+            font-size: 1.2rem; font-weight: 700; color: var(--accent); margin-bottom: 0.5rem;
+        }
+        .timeline-title { font-size: 1.1rem; color: var(--primary); margin-bottom: 0.3rem; }
+        .timeline-desc { color: #666; }
+        @media (max-width: 768px) {
+            .timeline-content { padding: 1rem; }
+        }
+        /* Contact */
+        .contact-container { display: flex; flex-wrap: wrap; gap: 2rem; margin-top: 2rem; }
+        .contact-info { flex: 1 1 320px; }
+        .contact-form { flex: 1 1 320px; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(44,62,80,0.07); padding: 2rem; }
+        .contact-item { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.5rem; }
+        .contact-icon { font-size: 1.5rem; color: var(--accent); margin-top: 0.2rem; }
+        .contact-text h3 { margin: 0 0 0.2rem 0; font-size: 1.1rem; color: var(--primary); }
+        .contact-text p { margin: 0; color: #666; font-size: 0.98rem; }
+        .contact-form label { font-weight: 500; color: var(--primary); }
+        .contact-form input, .contact-form textarea {
+            width: 100%; padding: 0.7rem; margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem;
+        }
+        .contact-form textarea { min-height: 90px; resize: vertical; }
+        .contact-form button { width: 100%; }
+        .form-group { margin-bottom: 1rem; }
     </style>
 </head>
-<body class="bg-light">
-<div class="container py-5">
-
-    <div class="d-flex justify-content-center align-items-center mb-4">
-        <img src="https://cdn-icons-png.flaticon.com/512/3064/3064197.png" alt="Safety" class="dashboard-img animate__animated animate__bounceIn"/>
-        <h1 class="text-center mb-0 animate__animated animate__fadeInDown">🦺 Safety Management Dashboard</h1>
+<body>
+    <!-- Loading Animation -->
+    <div class="loader-wrapper">
+        <div class="loader"></div>
     </div>
-
-    <!-- Trainings Section -->
-    <div class="card mb-5 shadow-sm animate__animated animate__fadeInLeft">
-        <div class="card-header bg-primary text-white">
-            <div class="d-flex justify-content-between align-items-center">
-                <h4 class="mb-0">Training Records</h4>
-                <a href="{{ url_for('add_training') }}" class="btn btn-light btn-sm">+ Add Training</a>
+    <!-- Header -->
+    <header id="header">
+        <div class="container flex justify-between items-center">
+            <div class="logo-container">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/7fc927b9-fad1-4b29-b1dc-cdf2880ca981.png" alt="BCCL Logo" class="logo">
+                <div>
+                    <h1 style="font-size:1.5rem; margin-bottom:0;">BCCL</h1>
+                    <p style="font-size:0.95rem; color:#eee;">Bharat Coking Coal Limited</p>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#safety">Safety</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Leading Coal Mining Solutions</h1>
+            <p>Bharat Coking Coal Limited is dedicated to sustainable mining practices and innovative solutions for India's energy needs.</p>
+            <a href="#about" class="btn">Explore More</a>
+        </div>
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+    </section>
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="section-header">
+                <h2>About BCCL</h2>
+                <p>With decades of experience in the coal mining industry, BCCL has established itself as a leader in coking coal production in India.</p>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Our Journey</h3>
+                    <p>Founded in 1971, Bharat Coking Coal Limited has grown to become one of the largest coking coal producers in India. Our operations span multiple mines across Jharkhand, employing state-of-the-art technology and sustainable mining practices.</p>
+                    <p>We are committed to operational excellence, safety standards, and environmental responsibility while meeting the nation's growing energy demands.</p>
+                    <h3 class="mt-4">Our Mission</h3>
+                    <p>To be the most trusted and innovative coal mining company, delivering sustainable energy solutions while prioritizing safety, environmental conservation, and community welfare.</p>
+                </div>
+                <div>
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/5217a8ff-de6d-4ac7-8fad-7e8906b2bed7.png" alt="BCCL mining facility" class="rounded-lg shadow-lg" style="width:100%;max-width:400px;">
+                    <div class="stats mt-4">
+                        <div class="stat-item">
+                            <h4>50+</h4>
+                            <p>Years in Operation</p>
+                        </div>
+                        <div class="stat-item">
+                            <h4>35M</h4>
+                            <p>Tonnes Annual Production</p>
+                        </div>
+                        <div class="stat-item">
+                            <h4>25K</h4>
+                            <p>Employees</p>
+                        </div>
+                        <div class="stat-item">
+                            <h4>40+</h4>
+                            <p>Active Mines</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="card-body">
-            {% if trainings %}
-                <div class="table-responsive">
-                    <table class="table table-bordered align-middle">
-                        <thead class="table-light">
-                        <tr>
-                            <th>ID</th>
-                            <th>Title</th>
-                            <th>Date</th>
-                            <th>File</th>
-                            <th>Delete</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for training in trainings %}
-                            <tr class="animate__animated animate__fadeInUp">
-                                <td>{{ training[0] }}</td>
-                                <td>{{ training[1] }}</td>
-                                <td>{{ training[2] }}</td>
-                                <td>
-                                    <a href="{{ url_for('uploaded_file', filename=training[3]) }}"
-                                       target="_blank" class="btn btn-outline-primary btn-sm">
-                                        <img src="https://cdn-icons-png.flaticon.com/512/724/724933.png" alt="Download" width="20" class="me-1"/>
-                                        Download
-                                    </a>
-                                </td>
-                                <td>
-                                    <form method="post" action="{{ url_for('delete_training', id=training[0]) }}" style="display:inline;" onsubmit="return confirm('Delete this training record?');">
-                                        <button type="submit" class="btn btn-danger btn-sm delete-btn">
-                                            <img src="https://cdn-icons-png.flaticon.com/512/1214/1214428.png" alt="Delete" width="18"/>
-                                        </button>
-                                    </form>
-                                </td>
+    </section>
+    <!-- Safety Dashboard Section -->
+    <section class="container py-5" id="safety">
+        <div class="d-flex justify-content-center align-items-center mb-4">
+            <h1 class="text-center mb-0 animate__animated animate__fadeInDown"> Safety Management Dashboard</h1>
+        </div>
+        <!-- Trainings Section -->
+        <div class="card mb-5 shadow-sm animate__animated animate__fadeInLeft">
+            <div class="card-header bg-primary text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Training Records</h4>
+                    <a href="{{ url_for('add_training') }}" class="btn btn-light btn-sm">+ Add Training</a>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if trainings %}
+                    <div class="table-responsive">
+                        <table class="table table-bordered align-middle">
+                            <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Title</th>
+                                <th>Date</th>
+                                <th>File</th>
+                                <th>Delete</th>
                             </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            {% else %}
-                <p class="text-muted">No training records found.</p>
-            {% endif %}
+                            </thead>
+                            <tbody>
+                            {% for training in trainings %}
+                                <tr class="animate__animated animate__fadeInUp">
+                                    <td>{{ training[0] }}</td>
+                                    <td>{{ training[1] }}</td>
+                                    <td>{{ training[2] }}</td>
+                                    <td>
+                                        <a href="{{ url_for('uploaded_file', filename=training[3]) }}"
+                                           target="_blank" class="btn btn-outline-primary btn-sm">
+                                            <img src="https://cdn-icons-png.flaticon.com/512/724/724933.png" alt="Download" width="20" class="me-1"/>
+                                            Download
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <form method="post" action="{{ url_for('delete_training', id=training[0]) }}" style="display:inline;" onsubmit="return confirm('Delete this training record?');">
+                                            <button type="submit" class="btn btn-danger btn-sm delete-btn">
+                                                <img src="https://cdn-icons-png.flaticon.com/512/1214/1214428.png" alt="Delete" width="18"/>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">No training records found.</p>
+                {% endif %}
+            </div>
         </div>
-    </div>
-
-    <!-- Gear Distribution Section -->
-    <div class="card shadow-sm animate__animated animate__fadeInRight">
-        <div class="card-header bg-success text-white d-flex align-items-center">
-            <img src="https://cdn-icons-png.flaticon.com/512/3064/3064197.png" alt="Gear" width="36" class="me-2 animate__animated animate__pulse animate__infinite"/>
-            <h4 class="mb-0">Gear Distribution Log</h4>
-        </div>
-        <div class="card-body">
-
-            <!-- Add Gear Form -->
-            <form method="post" action="{{ url_for('add_gear') }}" class="row g-3 mb-4 needs-validation" novalidate>
-                <div class="col-md-5">
-                    <input type="text" name="employee" class="form-control" placeholder="Employee Name" required>
-                    <div class="invalid-feedback">Employee name is required.</div>
-                </div>
-                <div class="col-md-5">
-                    <input type="text" name="gear" class="form-control" placeholder="Gear Item" required>
-                    <div class="invalid-feedback">Gear item is required.</div>
-                </div>
-                <div class="col-md-2 d-grid">
-                    <button type="submit" class="btn btn-success">Add Gear</button>
-                </div>
-            </form>
-
-            <!-- Gear Distribution Table -->
-            {% if gear %}
-                <div class="table-responsive">
-                    <table class="table table-bordered align-middle">
-                        <thead class="table-light">
-                        <tr>
-                            <th>ID</th>
-                            <th>Employee Name</th>
-                            <th>Gear Item</th>
-                            <th>Date</th>
-                            <th>Delete</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for g in gear %}
-                            <tr class="animate__animated animate__fadeInUp">
-                                <td>{{ g[0] }}</td>
-                                <td>{{ g[1] }}</td>
-                                <td>{{ g[2] }}</td>
-                                <td>{{ g[3] }}</td>
-                                <td>
-                                    <form method="post" action="{{ url_for('delete_gear', id=g[0]) }}" style="display:inline;" onsubmit="return confirm('Delete this gear record?');">
-                                        <button type="submit" class="btn btn-danger btn-sm delete-btn">
-                                            <img src="https://cdn-icons-png.flaticon.com/512/1214/1214428.png" alt="Delete" width="18"/>
-                                        </button>
-                                    </form>
-                                </td>
+        <!-- Gear Distribution Section -->
+        <div class="card shadow-sm animate__animated animate__fadeInRight">
+            <div class="card-header bg-success text-white d-flex align-items-center">
+                <img src="https://cdn-icons-png.flaticon.com/512/3064/3064197.png" alt="Gear" width="36" class="me-2 animate__animated animate__pulse animate__infinite"/>
+                <h4 class="mb-0">Gear Distribution Log</h4>
+            </div>
+            <div class="card-body">
+                <!-- Add Gear Form -->
+                <form method="post" action="{{ url_for('add_gear') }}" class="row g-3 mb-4 needs-validation" novalidate>
+                    <div class="col-md-5">
+                        <input type="text" name="employee" class="form-control" placeholder="Employee Name" required>
+                        <div class="invalid-feedback">Employee name is required.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <input type="text" name="gear" class="form-control" placeholder="Gear Item" required>
+                        <div class="invalid-feedback">Gear item is required.</div>
+                    </div>
+                    <div class="col-md-2 d-grid">
+                        <button type="submit" class="btn btn-success">Add Gear</button>
+                    </div>
+                </form>
+                <!-- Gear Distribution Table -->
+                {% if gear %}
+                    <div class="table-responsive">
+                        <table class="table table-bordered align-middle">
+                            <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Employee Name</th>
+                                <th>Gear Item</th>
+                                <th>Date</th>
+                                <th>Delete</th>
                             </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            {% else %}
-                <p class="text-muted">No gear distribution records available.</p>
-            {% endif %}
+                            </thead>
+                            <tbody>
+                            {% for g in gear %}
+                                <tr class="animate__animated animate__fadeInUp">
+                                    <td>{{ g[0] }}</td>
+                                    <td>{{ g[1] }}</td>
+                                    <td>{{ g[2] }}</td>
+                                    <td>{{ g[3] }}</td>
+                                    <td>
+                                        <form method="post" action="{{ url_for('delete_gear', id=g[0]) }}" style="display:inline;" onsubmit="return confirm('Delete this gear record?');">
+                                            <button type="submit" class="btn btn-danger btn-sm delete-btn">
+                                                <img src="https://cdn-icons-png.flaticon.com/512/1214/1214428.png" alt="Delete" width="18"/>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">No gear distribution records available.</p>
+                {% endif %}
+            </div>
         </div>
-    </div>
-
-    <!-- Contact Us Section -->
-    <div class="contact-section text-center animate__animated animate__fadeInUp">
-        <h4 class="mb-3">Contact Us</h4>
-        <p>
-            <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" alt="Contact" width="28" class="me-2"/>
-            For support or inquiries, email us at
-            <a href="mailto:safety@example.com" class="fw-bold text-primary">safety@example.com</a>
-        </p>
-    </div>
-</div>
-
-<!-- Bootstrap JS for form validation -->
-<script>
-    // Bootstrap client-side form validation
-    (function () {
-        'use strict'
-        const forms = document.querySelectorAll('.needs-validation')
-        Array.from(forms).forEach(function (form) {
-            form.addEventListener('submit', function (event) {
-                if (!form.checkValidity()) {
-                    event.preventDefault()
-                    event.stopPropagation()
+    </section>
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Services</h2>
+                <p>Providing comprehensive coal mining solutions with a focus on quality and sustainability.</p>
+            </div>
+            <div class="service-container">
+                <div class="service-card">
+                    <div class="service-img">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/3c5b6c9e-0d1a-4c8b-bb3c-5d6f7e8a9c1f.png" alt="Coal Mining Service">
+                    </div>
+                    <div class="service-content">
+                        <h3>Coking Coal Production</h3>
+                        <p>High-quality coking coal production for steel manufacturing and other industrial applications.</p>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-img">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/5d6e7f8a9c1f-0d1a-4c8b-bb3c-5d6f7e8a9c1f.png" alt="Coal Washery Service">
+                    </div>
+                    <div class="service-content">
+                        <h3>Coal Washing & Preparation</h3>
+                        <p>Advanced coal washing facilities to enhance product quality and reduce impurities.</p>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-img">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/6e7f8a9c1f0d1a4c8b-bb3c5d6f7e8a9c1.png" alt="Mining Equipment Service">
+                    </div>
+                    <div class="service-content">
+                        <h3>Mining Equipment Supply</h3>
+                        <p>Supplying state-of-the-art mining equipment and machinery to enhance operational efficiency.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <h2>Client Testimonials</h2>
+                <p>What our partners say about working with BCCL.</p>
+            </div>
+            <div class="testimonial-container">
+                <div class="testimonial-slide"></div>
+            </div>
+        </div>
+    </section>
+    <!-- Timeline Section -->
+    <section class="timeline-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Milestones</h2>
+                <p>Key moments in BCCL's journey of growth and innovation.</p>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">1971</div>
+                        <h3 class="timeline-title">Company Foundation</h3>
+                        <p class="timeline-desc">Bharat Coking Coal Limited was established with 12 mines and production capacity of 10 million tonnes annually.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">1985</div>
+                        <h3 class="timeline-title">Washery Commissioning</h3>
+                        <p class="timeline-desc">First coal preparation plant installed improving product quality and market competitiveness.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">1995</div>
+                        <h3 class="timeline-title">Production Milestone</h3>
+                        <p class="timeline-desc">Annual production crossed 20 million tonnes marking BCCL as India's premier coking coal producer.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">2008</div>
+                        <h3 class="timeline-title">Safety Certification</h3>
+                        <p class="timeline-desc">Received ISO 45001 certification for occupational health and safety management systems.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">2015</div>
+                        <h3 class="timeline-title">Environment Initiative</h3>
+                        <p class="timeline-desc">Launched comprehensive land reclamation program restoring over 500 acres of mined land.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">2022</div>
+                        <h3 class="timeline-title">Renewable Integration</h3>
+                        <p class="timeline-desc">Commenced hybrid energy projects combining solar power with mining operations.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2>Contact Us</h2>
+                <p>Get in touch with our team for inquiries, partnerships, or career opportunities.</p>
+            </div>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h3>Corporate Office</h3>
+                            <p>Koyla Bhawan, Dhanbad, Jharkhand, India - 826005</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h3>Call Us</h3>
+                            <p>+91 326 2202000</p>
+                            <p>+91 326 2202100</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h3>Email Us</h3>
+                            <p>contact@bccl.gov.in</p>
+                            <p>info@bccl.gov.in</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h3>Working Hours</h3>
+                            <p>Monday to Friday: 9:00 AM - 5:30 PM</p>
+                            <p>Saturday: 9:00 AM - 1:00 PM</p>
+                        </div>
+                    </div>
+                    <div class="social-links mt-4">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" required></textarea>
+                        </div>
+                        <button type="submit" class="btn w-full">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-col">
+                    <h3>About BCCL</h3>
+                    <p>Bharat Coking Coal Limited is a Public Sector Undertaking engaged in mining of coal and allied activities.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#safety">Safety</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Annual Reports</a></li>
+                        <li><a href="#">Investor Relations</a></li>
+                        <li><a href="#">Sustainability Report</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Tenders</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Subscribe</h3>
+                    <p>Subscribe to our newsletter for the latest updates and announcements from BCCL.</p>
+                    <form class="mt-4">
+                        <div class="form-group">
+                            <input type="email" placeholder="Your Email Address" required>
+                        </div>
+                        <button type="submit" class="btn mt-2">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2023 Bharat Coking Coal Limited. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- Back to Top Button -->
+    <a href="#" class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+    <!-- Scripts -->
+    <script>
+        // Loading animation
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.querySelector('.loader-wrapper').style.opacity = '0';
+                setTimeout(function() {
+                    document.querySelector('.loader-wrapper').style.display = 'none';
+                }, 500);
+            }, 1000);
+        });
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth' });
                 }
-                form.classList.add('was-validated')
-            }, false)
-        })
-    })()
-</script>
+            });
+        });
+        // Back to top button
+        const backToTopBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('active');
+            } else {
+                backToTopBtn.classList.remove('active');
+            }
+        });
+        // Contact form submission
+        const contactForm = document.getElementById('contactForm');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Thank you for your message. We will contact you soon.');
+                this.reset();
+            });
+        }
+        // Testimonial slider
+        let currentSlide = 0;
+        const testimonials = [
+            {
+                quote: '"BCCL has been our reliable coking coal supplier for over two decades. Their quality and delivery consistency are unmatched in the industry."',
+                author: "Rajesh Kumar",
+                role: "CEO, National Steel Corporation",
+                image: "https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/8aebce69-62c3-4fa2-a741-5ab155ffed60.png"
+            },
+            {
+                quote: '"Working with BCCL on our metallurgical coal requirements has been a seamless experience with their professional approach and technical expertise."',
+                author: "Priya Sharma",
+                role: "Procurement Head, Mega Steel Ltd.",
+                image: "https://placehold.co/200x200"
+            },
+            {
+                quote: '"Their commitment to sustainable mining practices sets them apart in the coal industry. BCCL is truly leading by example."',
+                author: "Amit Patel",
+                role: "Director, Green Energy Consortium",
+                image: "https://placehold.co/200x200"
+            }
+        ];
+        function showTestimonial(index) {
+            const testimonial = testimonials[index];
+            const testimonialSlide = document.querySelector('.testimonial-slide');
+            testimonialSlide.innerHTML = `
+                <div class="testimonial-img">
+                    <img src="${testimonial.image}" alt="Portrait of ${testimonial.author}">
+                </div>
+                <p class="testimonial-quote">${testimonial.quote}</p>
+                <h4 class="testimonial-author">${testimonial.author}</h4>
+                <p class="testimonial-role">${testimonial.role}</p>
+            `;
+            testimonialSlide.style.animation = 'none';
+            void testimonialSlide.offsetWidth;
+            testimonialSlide.style.animation = 'fadeIn 1s ease';
+        }
+        setInterval(function() {
+            currentSlide = (currentSlide + 1) % testimonials.length;
+            showTestimonial(currentSlide);
+        }, 5000);
+        showTestimonial(0);
+        // Bootstrap client-side form validation
+        (function () {
+            'use strict'
+            const forms = document.querySelectorAll('.needs-validation')
+            Array.from(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })();
+        // Floating shapes animation
+        const floatingShapes = document.querySelectorAll('.floating-shape');
+        floatingShapes.forEach((shape, index) => {
+            const duration = Math.random() * 10 + 8;
+            const delay = Math.random() * 2;
+            shape.style.animationDuration = `${duration}s`;
+            shape.style.animationDelay = `${delay}s`;
+        });
+    </script>
+
 </body>
 </html>
