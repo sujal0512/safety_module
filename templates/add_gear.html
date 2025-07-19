@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Add Gear{% endblock %}
+{% block content %}
+<h2>Distribute Gear</h2>
+<form method="post">
+  <div class="mb-3">
+    <label>Employee Name</label>
+    <input class="form-control" type="text" name="employee" required>
+  </div>
+  <div class="mb-3">
+    <label>Gear Item</label>
+    <input class="form-control" type="text" name="gear" required>
+  </div>
+  <button class="btn btn-success">Distribute</button>
+  <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back</a>
+</form>
+{% endblock %}

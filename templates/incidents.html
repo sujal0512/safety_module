@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Incidents{% endblock %}
+{% block content %}
+<h2>Incidents</h2>
+<form method="post" class="mb-4">
+  <div class="mb-3">
+    <label>Description</label>
+    <textarea class="form-control" name="description" required></textarea>
+  </div>
+  <div class="mb-3">
+    <label>Reported By</label>
+    <input class="form-control" type="text" name="reported_by" required>
+  </div>
+  <button class="btn btn-warning">Report</button>
+</form>
+<table class="table table-striped">
+<thead>
+<tr><th>Description</th><th>Reported By</th><th>Date</th><th>Actions</th></tr>
+</thead>
+<tbody>
+{% for i in incidents %}
+<tr>
+  <td>{{ i.description }}</td>
+  <td>{{ i.reported_by }}</td>
+  <td>{{ i.date }}</td>
+  <td>
+    <a class="btn btn-sm btn-secondary" href="{{ url_for('edit_incident', id=i.id) }}">Edit</a>
+    <form method="post" style="display:inline-block;" action="{{ url_for('delete_incident', id=i.id) }}" onsubmit="return confirm('Delete this incident?');">
+      <button class="btn btn-sm btn-danger">Delete</button>
+    </form>
+  </td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endblock %}

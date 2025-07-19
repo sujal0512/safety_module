@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Edit Gear{% endblock %}
+{% block content %}
+<h2>Edit Gear Distribution</h2>
+<form method="post">
+  <div class="mb-3">
+    <label>Employee Name</label>
+    <input class="form-control" type="text" name="employee" value="{{ gear_item.employee_name }}" required>
+  </div>
+  <div class="mb-3">
+    <label>Gear Item</label>
+    <input class="form-control" type="text" name="gear" value="{{ gear_item.gear_item }}" required>
+  </div>
+  <button class="btn btn-success">Save</button>
+  <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back</a>
+</form>
+{% endblock %}

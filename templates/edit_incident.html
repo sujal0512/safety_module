@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Edit Incident{% endblock %}
+{% block content %}
+<h2>Edit Incident</h2>
+<form method="post">
+  <div class="mb-3">
+    <label>Description</label>
+    <textarea class="form-control" name="description" required>{{ incident.description }}</textarea>
+  </div>
+  <div class="mb-3">
+    <label>Reported By</label>
+    <input class="form-control" type="text" name="reported_by" value="{{ incident.reported_by }}" required>
+  </div>
+  <button class="btn btn-warning">Save</button>
+  <a href="{{ url_for('incidents_view') }}" class="btn btn-secondary">Back</a>
+</form>
+{% endblock %}
